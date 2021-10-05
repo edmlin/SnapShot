@@ -7,13 +7,6 @@
         mc:Ignorable="d"
         Icon="resource/icon.ico"
         Title="SnapShot" Height="225" Width="511" Loaded="Window_Loaded" Closing="Window_Closing" Deactivated="Window_Deactivated" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" WindowStyle="ThreeDBorderWindow" StateChanged="Window_StateChanged" IsVisibleChanged="Window_IsVisibleChanged">
-    <Window.Resources>
-        <ContextMenu x:Key="cmTray">
-            <MenuItem x:Name="miOpenFolder" Header="Open Output Folder" Click="miOpenFolder_Click" />
-            <Separator/>
-            <MenuItem x:Name="miExit" Header="Exit" Click="btExit_Click" />
-        </ContextMenu>
-    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
