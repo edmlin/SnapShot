@@ -69,15 +69,16 @@ namespace SnapShot
             m_notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
             m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
             m_notifyIcon.Visible = true;
-            hotkey.OnHotkeySet += (o,ev) => PropertyChanged(this, new PropertyChangedEventArgs("HotkeyString"));
-            hotkey.OnHotkey += (o, ev) => ScreenShot.Take(System.IO.Path.Combine(OutputFolder,DateTime.Now.ToString("yyyyMMddHHmmss")), Quality);
             tbFolder.Text = OutputFolder = ConfigurationManager.AppSettings["OutputFolder"] ?? System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            hotkey.OnHotkeySet += (o, ev) => PropertyChanged(this, new PropertyChangedEventArgs("HotkeyString"));
+            hotkey.OnHotkey += (o, ev) => ScreenShot.Take(System.IO.Path.Combine(OutputFolder, DateTime.Now.ToString("yyyyMMddHHmmss")), Quality);
             long quality;
             if (long.TryParse(ConfigurationManager.AppSettings["Quality"], out quality))
             {
                 Quality = quality;
+                PropertyChanged(this, new PropertyChangedEventArgs("Quality"));
             }
-            if(ConfigurationManager.AppSettings["Hotkey"]!=null)
+            if (ConfigurationManager.AppSettings["Hotkey"]!=null)
             {
                 try
                 {
@@ -196,6 +197,11 @@ namespace SnapShot
         private void tbFolder_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             SelectFolder();
+        }
+
+        private void btOpen_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(tbFolder.Text);
         }
     }
 }
