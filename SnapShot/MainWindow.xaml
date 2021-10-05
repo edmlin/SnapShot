@@ -7,6 +7,13 @@
         mc:Ignorable="d"
         Icon="resource/icon.ico"
         Title="SnapShot" Height="225" Width="511" Loaded="Window_Loaded" Closing="Window_Closing" Deactivated="Window_Deactivated" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" WindowStyle="ThreeDBorderWindow" StateChanged="Window_StateChanged" IsVisibleChanged="Window_IsVisibleChanged">
+    <Window.Resources>
+        <ContextMenu x:Key="cmTray">
+            <MenuItem x:Name="miOpenFolder" Header="Open Output Folder" Click="miOpenFolder_Click" />
+            <Separator/>
+            <MenuItem x:Name="miExit" Header="Exit" Click="btExit_Click" />
+        </ContextMenu>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
@@ -34,7 +41,7 @@
         <Label x:Name="label2" Content="Quality:" HorizontalAlignment="Right" Margin="38,10,0,0" Grid.Row="2" VerticalAlignment="Top"/>
         <Slider x:Name="slQuality" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Center" Width="355" SmallChange="1" Maximum="100" Minimum="10" Value="{Binding Quality}" TickFrequency="0"/>
         <Label x:Name="label3" Content="{Binding Value, ElementName=slQuality}" Grid.Column="2" HorizontalAlignment="Left" Margin="0,0,0,0" Grid.Row="2" VerticalAlignment="Center" />
-        <Button x:Name="btOpen" Grid.Column="2" HorizontalAlignment="Center" Margin="0,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="16" Height="16" Background="{x:Null}" BorderThickness="0" Click="btOpen_Click">
+        <Button x:Name="btOpen" Grid.Column="2" HorizontalAlignment="Left" Margin="0,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="16" Height="16" Background="{x:Null}" BorderThickness="0" Click="btOpen_Click">
             <Image x:Name="image" Width="16" Height="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Source="resource/OpenFolder_16x.png"/>
         </Button>
     </Grid>

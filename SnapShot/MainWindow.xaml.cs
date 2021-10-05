@@ -38,10 +38,19 @@ namespace SnapShot
             DataContext = this;
         }
 
-        private void m_notifyIcon_Click(object sender, EventArgs e)
+        private void m_notifyIcon_Click(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            Show();
-            WindowState = m_storedWindowState;
+            System.Windows.Controls.ContextMenu cm = this.FindResource("cmTray") as System.Windows.Controls.ContextMenu;
+            if (e.Button == MouseButtons.Left)
+            {
+                Show();
+                WindowState = m_storedWindowState;
+                cm.IsOpen = false;
+            }
+            else
+            {
+                cm.IsOpen = true;
+            }
         }
 
         private void tbHotKey_GotFocus(object sender, RoutedEventArgs e)
@@ -67,8 +76,9 @@ namespace SnapShot
             m_notifyIcon.BalloonTipTitle = "SnapShot";
             m_notifyIcon.Text = "SnapShot";
             m_notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
-            m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
-            m_notifyIcon.Visible = true;
+            //m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
+            m_notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(m_notifyIcon_Click);
+            m_notifyIcon.Visible = false;
             tbFolder.Text = OutputFolder = ConfigurationManager.AppSettings["OutputFolder"] ?? System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             hotkey.OnHotkeySet += (o, ev) => PropertyChanged(this, new PropertyChangedEventArgs("HotkeyString"));
             hotkey.OnHotkey += (o, ev) => ScreenShot.Take(System.IO.Path.Combine(OutputFolder, DateTime.Now.ToString("yyyyMMddHHmmss")), Quality);
@@ -93,6 +103,11 @@ namespace SnapShot
             {
                 hotkey.SetHotkey(new List<Key>() { Key.Snapshot });
             }
+        }
+
+        private void M_notifyIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -203,5 +218,11 @@ namespace SnapShot
         {
             Process.Start(tbFolder.Text);
         }
+
+        private void miOpenFolder_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(tbFolder.Text);
+        }
+
     }
 }
