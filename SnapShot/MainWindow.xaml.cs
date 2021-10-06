@@ -17,6 +17,7 @@ using WinForms=System.Windows.Forms;
 using System.Configuration;
 using System.Reflection;
 using System.ComponentModel;
+using System.IO;
 
 namespace SnapShot
 {
@@ -28,7 +29,22 @@ namespace SnapShot
         private GlobalKeyboardHook _globalKeyboardHook;
         private LowLevelKeyboardListener _listener;
         System.Windows.Forms.NotifyIcon m_notifyIcon;
-        public string OutputFolder { get; set; } = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+        string outputFolder = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+        public string OutputFolder
+        {
+            get
+            {
+                return outputFolder;
+            }
+            set
+            {
+                if (Directory.Exists(value))
+                {
+                    outputFolder = value;
+                    PropertyChanged(this, new PropertyChangedEventArgs("OutputFolder"));
+                }
+            }
+        }
         public long Quality { get; set; } = 80L;
         Hotkey hotkey = new Hotkey();
         bool reallyClose = false;
@@ -71,7 +87,7 @@ namespace SnapShot
             m_notifyIcon.ContextMenu = CreateTrayContextMenu();
             m_notifyIcon.MouseClick += new WinForms.MouseEventHandler(m_notifyIcon_MouseClick);
             m_notifyIcon.Visible = false;
-            tbFolder.Text = OutputFolder = ConfigurationManager.AppSettings["OutputFolder"] ?? System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            OutputFolder = ConfigurationManager.AppSettings["OutputFolder"] ?? System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             hotkey.OnHotkeySet += (o, ev) => PropertyChanged(this, new PropertyChangedEventArgs("HotkeyString"));
             hotkey.OnHotkey += (o, ev) => ScreenShot.Take(System.IO.Path.Combine(OutputFolder, DateTime.Now.ToString("yyyyMMddHHmmss")), Quality);
             long quality;
@@ -202,7 +218,7 @@ namespace SnapShot
             var result = dlg.ShowDialog(null);
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                tbFolder.Text = OutputFolder = dlg.SelectedPath;
+                OutputFolder = dlg.SelectedPath;
             }
         }
 
